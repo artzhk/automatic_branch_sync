@@ -45,9 +45,6 @@ jobs:
               git add conflict_log.txt && git commit -m "Conflict during merge" && git push
               continue
             fi
-            
-            # Continue merge process if required
-            git merge --continue || echo "Merge continuation failed. Please resolve manually."
 
             # Optional: Push the merged branch
             git push
