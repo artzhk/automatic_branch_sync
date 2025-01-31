@@ -50,7 +50,7 @@ jobs:
             git merge --continue || echo "Merge continuation failed. Please resolve manually."
 
             # Optional: Push the merged branch
-            git push origin $branch
+            git push
             
             echo "Successfully synced branch $branch"
           done
