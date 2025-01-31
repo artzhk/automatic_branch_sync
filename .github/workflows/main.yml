@@ -1,0 +1,53 @@
+name: Sync Feature Branch with Dev
+
+on:
+  schedule:
+    - cron: '40 * * * *'  # Runs every day at midnight (UTC)
+  push:
+    branches:
+      - dev  # Optionally trigger on push to dev to sync other branches
+
+jobs:
+  sync-feature-branches:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        
+      - name: Set up Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+      
+      - name: Get all branches
+        run: git fetch --all
+        
+      - name: Sync with dev branch
+        run: |
+          # List all feature branches (use a prefix if desired)
+          feature_branches=$(git branch -r | grep 'origin/feature' | sed 's/origin\///')
+
+          # Loop over each feature branch and merge/rebase
+          for branch in $feature_branches; do
+            echo "Syncing branch $branch"
+            git checkout $branch
+            
+            if [[ -z $(git diff dev) ]]; then 
+              echo "Nothing to merge for branch $branch. Skipping..."
+              continue
+            fi
+            
+            git merge origin/dev --no-ff -m "Automatic sync with dev branch"
+
+            if [[ $? -ne 0 ]]; then 
+              git merge --abort
+              echo "Merge Conflict" 
+              echo "Merge Conflicte on $(date) in $branch" >> confilct_log.txt
+              git add conflict_log.txt && git commit -m "Conflict during merge" && git push
+            fi
+
+            gic merge --continue
+            
+            # Optional: You can push automatically if you're confident in the workflow
+            git push origin $branch
+      
