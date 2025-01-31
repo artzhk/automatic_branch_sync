@@ -19,6 +19,7 @@ for branch in $feature_branches; do
       git merge --abort
       echo "Merge Conflict" 
       echo "Merge Conflict on $(date) in $branch" >> conflict_log.txt
+      #echo "Merge Conflict on $(date) in $branch" >> conflict_log.txt
       git add conflict_log.txt && git commit -m "Conflict during merge" && git push
       continue
     fi
