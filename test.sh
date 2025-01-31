@@ -14,6 +14,7 @@ for branch in $feature_branches; do
     fi
 
     git merge origin/dev --no-ff -m "Automatic sync with dev branch"
+
     if [[ $? -ne 0 ]]; then 
       git merge --abort
       echo "Merge Conflict" 
@@ -22,11 +23,8 @@ for branch in $feature_branches; do
       continue
     fi
 
-    # Continue merge process if required
-    git merge --continue || echo "Merge continuation failed. Please resolve manually."
-
     # Optional: Push the merged branch
-    git push
+    # git push
 
     echo "Successfully synced branch $branch"
 done
