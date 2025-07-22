@@ -30,4 +30,6 @@ for branch in $feature_branches; do
     echo "Successfully synced branch $branch"
 done
 
+# Test changes 21/07/2025
+
 echo "Sync process completed."
